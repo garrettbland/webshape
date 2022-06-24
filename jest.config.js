@@ -1,15 +1,22 @@
-export default {
+module.exports = {
+    preset: 'ts-jest',
     testEnvironment: 'node',
-    preset: 'ts-jest/presets/default-esm',
-    globals: {
-        'ts-jest': {
-            useESM: true,
+    transform: {
+        '^.+\\.ts?$': 'ts-jest',
+    },
+    collectCoverageFrom: [
+        'src/**/*.{ts,tsx}',
+        '!src/**/*.test.ts',
+        '!<rootDir>/node_modules/',
+        '!<rootDir>/build/',
+    ],
+    coverageThreshold: {
+        global: {
+            branches: 80,
+            functions: 80,
+            lines: 80,
+            statements: 80,
         },
     },
-    moduleNameMapper: {
-        '^(\\.{1,2}/.*)\\.(m)?js$': '$1',
-    },
-    testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(m)?ts$',
-    coverageDirectory: 'coverage',
-    collectCoverageFrom: ['src/**/*.ts', 'src/**/*.mts', '!src/**/*.d.ts', '!src/**/*.d.mts'],
+    coverageReporters: ['json', ['lcov', { projectRoot: './src' }], 'text', 'clover'],
 }

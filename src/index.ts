@@ -1,16 +1,17 @@
-import express from 'express'
-import morgan from 'morgan'
+import { getApp } from './app'
 
-const app = express()
+const server = getApp({ logger: true })
 
-app.use(morgan('tiny'))
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000
 
-app.get('/', (req, res) => {
-    console.log(req)
-    res.send('hello')
-})
+const start = async () => {
+    try {
+        await server.listen({ port: PORT })
+        console.log(`App starting on port ${PORT}`)
+    } catch (err) {
+        server.log.error(err)
+        process.exit(1)
+    }
+}
 
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-    console.debug('App listening on :3000')
-})
+start()

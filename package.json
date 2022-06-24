@@ -2,18 +2,15 @@
     "name": "webshape",
     "version": "0.0.0",
     "description": "Host application for serving WebShape dynamic websites",
-    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
-        "start": "node build/src/index.js",
-        "clean": "rimraf coverage build tmp",
-        "prebuild": "npm run lint",
-        "build": "tsc -p tsconfig.json",
-        "build:watch": "tsc -w -p tsconfig.json",
-        "build:release": "npm run clean && tsc -p tsconfig.release.json",
-        "lint": "eslint . --ext .ts --ext .mts",
-        "test": "jest --coverage",
-        "prettier": "prettier --config .prettierrc --write .",
-        "test:watch": "jest --watch"
+        "format": "prettier --write src",
+        "lint": "npm run format && eslint src/**/*.ts --fix",
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "start": "nodemon ./src/index.ts",
+        "test": "jest --colors --runInBand"
     },
     "author": "Garrett Bland",
     "license": "ISC",
@@ -21,24 +18,27 @@
         "node": ">= 16.13 <17"
     },
     "dependencies": {
-        "express": "^4.18.1",
+        "fastify": "^4.1.0",
         "lodash-es": "^4.17.21",
-        "morgan": "^1.10.0",
         "squirrelly": "^8.0.8"
     },
     "devDependencies": {
         "@types/jest": "~27.5",
         "@types/lodash": "^4.14.182",
         "@types/node": "~16",
+        "@types/supertest": "^2.0.12",
         "@typescript-eslint/eslint-plugin": "~5.26",
         "@typescript-eslint/parser": "~5.26",
         "eslint": "~8.16",
         "eslint-config-prettier": "~8.5",
         "eslint-plugin-jest": "~26.2",
         "jest": "~28.1",
+        "nodemon": "^2.0.18",
         "prettier": "~2.6",
         "rimraf": "~3.0",
+        "supertest": "^6.2.3",
         "ts-jest": "~28.0",
+        "ts-node": "^10.8.1",
         "tsutils": "~3.21",
         "typescript": "~4.7"
     }
