@@ -1,0 +1,43 @@
+{
+    "name": "webshape",
+    "version": "0.0.0",
+    "description": "Host application for serving WebShape dynamic websites",
+    "type": "module",
+    "scripts": {
+        "start": "node build/src/index.js",
+        "clean": "rimraf coverage build tmp",
+        "prebuild": "npm run lint",
+        "build": "tsc -p tsconfig.json",
+        "build:watch": "tsc -w -p tsconfig.json",
+        "build:release": "npm run clean && tsc -p tsconfig.release.json",
+        "lint": "eslint . --ext .ts --ext .mts",
+        "test": "jest --coverage",
+        "prettier": "prettier --config .prettierrc --write .",
+        "test:watch": "jest --watch"
+    },
+    "author": "Garrett Bland",
+    "license": "ISC",
+    "engines": {
+        "node": ">= 16.13 <17"
+    },
+    "dependencies": {
+        "lodash-es": "^4.17.21",
+        "squirrelly": "^8.0.8"
+    },
+    "devDependencies": {
+        "@types/jest": "~27.5",
+        "@types/lodash": "^4.14.182",
+        "@types/node": "~16",
+        "@typescript-eslint/eslint-plugin": "~5.26",
+        "@typescript-eslint/parser": "~5.26",
+        "eslint": "~8.16",
+        "eslint-config-prettier": "~8.5",
+        "eslint-plugin-jest": "~26.2",
+        "jest": "~28.1",
+        "prettier": "~2.6",
+        "rimraf": "~3.0",
+        "ts-jest": "~28.0",
+        "tsutils": "~3.21",
+        "typescript": "~4.7"
+    }
+}
