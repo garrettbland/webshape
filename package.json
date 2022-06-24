@@ -21,7 +21,9 @@
         "node": ">= 16.13 <17"
     },
     "dependencies": {
+        "express": "^4.18.1",
         "lodash-es": "^4.17.21",
+        "morgan": "^1.10.0",
         "squirrelly": "^8.0.8"
     },
     "devDependencies": {
