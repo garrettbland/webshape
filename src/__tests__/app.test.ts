@@ -7,12 +7,12 @@ describe('Application test', () => {
     beforeAll(async () => await app.ready())
     afterAll(() => app.close())
 
-    it('GET `/` route', async () => {
+    it('GET `/test` route', async () => {
         const response = await supertest(app.server)
-            .get('/')
+            .get('/test')
             .expect(200)
             .expect('Content-Type', 'text/html; charset=utf-8')
 
-        expect(response.text).toEqual('<h1>Site</h1><p>Welcome</p>')
+        expect(response.text).toEqual('<h1>Test</h1><p>Working page</p>')
     })
 })

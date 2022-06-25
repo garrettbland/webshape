@@ -1,19 +1,20 @@
 import { parse, render, getConfig, filters } from 'squirrelly'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash'
 import { TemplateObject } from 'squirrelly/dist/types/parse.js'
 
 /**
  * Example HTML
  */
 const EXAMPLE_HTML =
-    "<h1>{{ it.title | text }}</h1><p>{{ it.title | text }}</><img src='{{ it.image | image }}'><p>{{ it.description | content }}</p>"
+    "<h1>{{ it.title | text }}</h1><p>{{ it.title | text }}</><img width='250px' height='250px' src='{{ it.hero_image | image }}'><p>{{ it.description | content }}</p>"
 
 /**
  * Example DB
  */
 const DB_RECORD = {
     name: 'garrett',
-    hero_image: 'https://example.com/image.jpg',
+    hero_image:
+        'https://images.unsplash.com/photo-1656066835561-c850f7384f69?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
     title: 'Example site',
 }
 
@@ -70,7 +71,7 @@ const getDynamicItems = (HTML: string) => {
     return normalizedTreeItems
 }
 
-const build = () => {
+export const build = () => {
     console.log('Building webpage...')
 
     /**
@@ -107,6 +108,5 @@ const build = () => {
      * Send to client
      */
     console.log(rendered)
+    return rendered
 }
-
-build()

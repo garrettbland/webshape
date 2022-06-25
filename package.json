@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "fastify": "^4.1.0",
-        "lodash-es": "^4.17.21",
+        "lodash": "^4.17.21",
         "squirrelly": "^8.0.8"
     },
     "devDependencies": {
