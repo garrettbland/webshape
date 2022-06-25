@@ -1,12 +1,11 @@
 {
     "compilerOptions": {
-        "lib": ["ESNext"],
+        "lib": ["ESNext", "DOM"],
         "strict": true,
         "module": "CommonJS",
         "esModuleInterop": true,
         "target": "ES2020",
         "noImplicitAny": true,
-        "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
         "declaration": true,
