@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { getApp } from './app'
 
 const server = getApp({ logger: true })

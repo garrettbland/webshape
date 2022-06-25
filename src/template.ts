@@ -2,21 +2,17 @@ import { parse, render, getConfig, filters } from 'squirrelly'
 import { uniqBy } from 'lodash'
 import { TemplateObject } from 'squirrelly/dist/types/parse.js'
 
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = 'https://dztmlsuztaonzwvowtlz.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY as string
+const supabase = createClient(supabaseUrl, supabaseKey)
+
 /**
  * Example HTML
  */
-const EXAMPLE_HTML =
-    "<h1>{{ it.title | text }}</h1><p>{{ it.title | text }}</><img width='250px' height='250px' src='{{ it.hero_image | image }}'><p>{{ it.description | content }}</p>"
-
-/**
- * Example DB
- */
-const DB_RECORD = {
-    name: 'garrett',
-    hero_image:
-        'https://images.unsplash.com/photo-1656066835561-c850f7384f69?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    title: 'Example site',
-}
+// const EXAMPLE_HTML =
+//     "<h1>{{ it.title | text }}</h1><p>{{ it.title | text }}</><div><img width='250px' height='250px' src='{{ it.hero_image | image }}'></div><p>{{ it.my_name | text }}</p><p>{{ it.description | content }}</p>"
 
 /**
  * Merge custom config options into Squirelly default config
@@ -71,15 +67,47 @@ const getDynamicItems = (HTML: string) => {
     return normalizedTreeItems
 }
 
-export const build = () => {
-    console.log('Building webpage...')
+export const build = async () => {
+    // Simulate stuff we will get from request
+    const DOMAIN = 'webshape.onrender.com'
+    const PAGE = '/'
+
+    // First get the domain from the sites table to know which template we need
+
+    let { data: sites, error: sites_error } = await supabase
+        .from('sites')
+        .select('domain, template_id')
+        .eq('domain', DOMAIN)
+
+    const TEMPLATE_ID = (sites as any[])[0].template_id
+
+    // Once we get the template id, get template
+    let { data: templates, error: templates_error } = await supabase
+        .from('templates')
+        .select('id, template')
+        .eq('id', TEMPLATE_ID)
+
+    const TEMPLATE = (templates as any[])[0].template
+
+    let { data: test_template_data, error } = await supabase
+        .from('test_template_data')
+        .select('*')
+        .eq('domain', DOMAIN)
+        .eq('page', PAGE)
+
+    // takes in array of objects from supabase and reduces into object for template
+    const databaseObject = test_template_data?.reduce((previousValue, nextValue) => {
+        return {
+            ...previousValue,
+            [nextValue.key]: nextValue.value,
+        }
+    }, {})
 
     /**
      * Parse HTML and get data needed for template
      */
-    const options = getDynamicItems(EXAMPLE_HTML)
+    const options = getDynamicItems(TEMPLATE)
     console.log(`This template needs ${options.map(({ key }) => key).join(', ')}`)
-    console.log(`Select stuff from db`)
 
     /**
      * Create object to be injected into template
@@ -96,17 +124,16 @@ export const build = () => {
      */
     const templateData = {
         ...requiredTemplateObject,
-        ...DB_RECORD,
+        ...databaseObject,
     }
 
     /**
      * Render html with template data
      */
-    const rendered = render(EXAMPLE_HTML, templateData)
+    const rendered = render(TEMPLATE, templateData)
 
     /**
      * Send to client
      */
-    console.log(rendered)
     return rendered
 }

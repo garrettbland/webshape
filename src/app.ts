@@ -13,7 +13,7 @@ export const getApp = (opts?: FastifyServerOptions) => {
     // })
 
     app.get('/', async (request, reply) => {
-        const content = build()
+        const content = await build()
         reply.type('text/html').send(content)
     })
 
