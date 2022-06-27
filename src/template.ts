@@ -67,19 +67,20 @@ const getDynamicItems = (HTML: string) => {
     return normalizedTreeItems
 }
 
-export const build = async () => {
+export const build = async (HOSTNAME: string, ROUTE: string) => {
     // Simulate stuff we will get from request
-    const DOMAIN = 'webshape.onrender.com'
-    const PAGE = '/'
+    //const HOSTNAME = 'webshape.onrender.com'
+    //const ROUTE = '/'
 
     // First get the domain from the sites table to know which template we need
 
-    let { data: sites, error: sites_error } = await supabase
-        .from('sites')
-        .select('domain, template_id')
-        .eq('domain', DOMAIN)
+    let { data: page_template, error: sites_error } = await supabase
+        .from('site_page_template')
+        .select('domain, route, template_id')
+        .eq('domain', HOSTNAME)
+        .eq('route', ROUTE)
 
-    const TEMPLATE_ID = (sites as any[])[0].template_id
+    const TEMPLATE_ID = (page_template as any[])[0].template_id
 
     // Once we get the template id, get template
     let { data: templates, error: templates_error } = await supabase
@@ -91,9 +92,9 @@ export const build = async () => {
 
     let { data: test_template_data, error } = await supabase
         .from('test_template_data')
-        .select('*')
-        .eq('domain', DOMAIN)
-        .eq('page', PAGE)
+        .select('key, value')
+        .eq('domain', HOSTNAME)
+        .eq('route', ROUTE)
 
     // takes in array of objects from supabase and reduces into object for template
     const databaseObject = test_template_data?.reduce((previousValue, nextValue) => {
