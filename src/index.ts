@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { getApp } from './app'
 
-const server = getApp({ logger: true })
+const server = getApp({ logger: false })
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000
 

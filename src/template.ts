@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://dztmlsuztaonzwvowtlz.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY as string
-const supabase = createClient(supabaseUrl, supabaseKey)
+export const supabase = createClient(supabaseUrl, supabaseKey)
 
 /**
  * Example HTML
@@ -33,7 +33,7 @@ FILTERS.forEach((filterItem) => filters.define(filterItem, (originalVal) => orig
  * Parses HTML template, grabs Ast objects, removes duplicates, and
  * then returns array of normalized readable objects
  */
-const getDynamicItems = (HTML: string) => {
+export const getDynamicItems = (HTML: string) => {
     /**
      * Parse HTML string into AST Tree
      */

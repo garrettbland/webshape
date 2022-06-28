@@ -1,0 +1,8 @@
+{
+    "title": "WebShape",
+    "private": true,
+    "test_data": {
+        "title": "Webshape Test",
+        "description": "Website in minutes"
+    }
+}
