@@ -97,7 +97,7 @@ export const getApp = (opts?: FastifyServerOptions) => {
             const template_test_data = join(process.cwd(), path, 'meta.json')
 
             const html_template = await readFile(template_file_path, 'utf-8')
-            const test_data = JSON.parse(await readFile(template_test_data, 'utf-8'))
+            const { test_data } = JSON.parse(await readFile(template_test_data, 'utf-8'))
 
             const HTML = render(html_template, test_data)
 

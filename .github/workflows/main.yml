@@ -29,3 +29,17 @@ jobs:
             - run: npm run lint --if-present
             - run: npm test
             - run: npm run build --if-present
+
+    generate-templates:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+
+            - name: User Node 16
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 16.x
+
+            - run: 'echo "🏗 Add templates to database"'
+            - run: 'echo "🌄 Generate template screenshots"'

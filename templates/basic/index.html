@@ -8,8 +8,9 @@
     <body>
         <div class="flex items-center flex-col my-24">
             <h1 class="text-3xl font-bold underline">Welcome to {{ it.title | text }}</h1>
-            <p>{{ it.description | content }}</p>
+            <p>{{ it.description | text }}</p>
             <img src="{{ it.hero_image | image }}" alt="{{ it.title | text }}" />
+            test
         </div>
     </body>
 </html>

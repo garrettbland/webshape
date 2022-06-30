@@ -2,5 +2,5 @@
     "execMap": {
         "ts": "ts-node"
     },
-    "ignore": ["*.{spec,test}.ts"]
+    "ignore": ["*.{spec,test}.ts", "templates/*", "templates/**/*.json"]
 }

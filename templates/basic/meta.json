@@ -1,0 +1,8 @@
+{
+    "title": "Basic",
+    "public": true,
+    "test_data": {
+        "title": "Webshape Test",
+        "description": "Websites and stuff!!!"
+    }
+}

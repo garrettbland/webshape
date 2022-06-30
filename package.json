@@ -9,7 +9,7 @@
         "lint": "npm run format && eslint src/**/*.ts --fix",
         "build": "tsc",
         "watch": "tsc --watch",
-        "start": "nodemon ./src/index.ts",
+        "start": "nodemon ./src/index.ts --config nodemon.json",
         "test": "jest --colors --runInBand"
     },
     "author": "Garrett Bland",
