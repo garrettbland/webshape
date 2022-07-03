@@ -1,12 +1,13 @@
-import { parse, render, getConfig, filters } from 'squirrelly'
-import { uniqBy } from 'lodash'
-import { TemplateObject } from 'squirrelly/dist/types/parse.js'
+import { render, filters } from 'squirrelly'
+import { getDynamicItems } from './utils/template'
 
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://dztmlsuztaonzwvowtlz.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY as string
 export const supabase = createClient(supabaseUrl, supabaseKey)
+
+import { getRouteTemplate } from './db'
 
 /**
  * Example HTML
@@ -17,9 +18,9 @@ export const supabase = createClient(supabaseUrl, supabaseKey)
 /**
  * Merge custom config options into Squirelly default config
  */
-const CONFIG = getConfig({
-    tags: ['{{', '}}'],
-})
+// const CONFIG = getConfig({
+//     tags: ['{{', '}}'],
+// })
 
 /**
  * Custom filters. Used for our purpose as "tags" to define type of
@@ -33,39 +34,39 @@ FILTERS.forEach((filterItem) => filters.define(filterItem, (originalVal) => orig
  * Parses HTML template, grabs Ast objects, removes duplicates, and
  * then returns array of normalized readable objects
  */
-export const getDynamicItems = (HTML: string) => {
-    /**
-     * Parse HTML string into AST Tree
-     */
-    const parsedHTML = parse(HTML, CONFIG)
+// export const getDynamicItems = (HTML: string) => {
+//     /**
+//      * Parse HTML string into AST Tree
+//      */
+//     const parsedHTML = parse(HTML, CONFIG)
 
-    /**
-     * Filter out everything except for AST Objects. These objects
-     */
-    const allTreeObjects = parsedHTML.filter((i) => i === Object(i))
+//     /**
+//      * Filter out everything except for AST Objects. These objects
+//      */
+//     const allTreeObjects = parsedHTML.filter((i) => i === Object(i))
 
-    /**
-     * Remove duplicates. Example - Page title might be used in multiple
-     * places.
-     */
-    const treeObjects = uniqBy(allTreeObjects, 'c')
+//     /**
+//      * Remove duplicates. Example - Page title might be used in multiple
+//      * places.
+//      */
+//     const treeObjects = uniqBy(allTreeObjects, 'c')
 
-    /**
-     * Normalize data into something we can use and better understand
-     * in the rest of our application. Example shape returned by default.
-     * Returns array of objects and slices of "it." from "c" value
-     * ```
-     * { f: [ [Array] ], c: 'it.title', t: 'i'}
-     * ```
-     */
-    const normalizedTreeItems = (treeObjects as TemplateObject[]).map((item) => {
-        return {
-            key: item?.c?.slice(3),
-        }
-    })
+//     /**
+//      * Normalize data into something we can use and better understand
+//      * in the rest of our application. Example shape returned by default.
+//      * Returns array of objects and slices of "it." from "c" value
+//      * ```
+//      * { f: [ [Array] ], c: 'it.title', t: 'i'}
+//      * ```
+//      */
+//     const normalizedTreeItems = (treeObjects as TemplateObject[]).map((item) => {
+//         return {
+//             key: item?.c?.slice(3),
+//         }
+//     })
 
-    return normalizedTreeItems
-}
+//     return normalizedTreeItems
+// }
 
 export const build = async (HOSTNAME: string, ROUTE: string) => {
     // Simulate stuff we will get from request
@@ -74,21 +75,23 @@ export const build = async (HOSTNAME: string, ROUTE: string) => {
 
     // First get the domain from the sites table to know which template we need
 
-    let { data: page_template, error: sites_error } = await supabase
-        .from('site_page_template')
-        .select('domain, route, template_id')
-        .eq('domain', HOSTNAME)
-        .eq('route', ROUTE)
+    // let { data: page_template, error: sites_error } = await supabase
+    //     .from('site_page_template')
+    //     .select('domain, route, template_id')
+    //     .eq('domain', HOSTNAME)
+    //     .eq('route', ROUTE)
 
-    const TEMPLATE_ID = (page_template as any[])[0].template_id
+    // const TEMPLATE_ID = (page_template as any[])[0].template_id
 
-    // Once we get the template id, get template
-    let { data: templates, error: templates_error } = await supabase
-        .from('templates')
-        .select('id, template')
-        .eq('id', TEMPLATE_ID)
+    // // Once we get the template id, get template
+    // let { data: templates, error: templates_error } = await supabase
+    //     .from('templates')
+    //     .select('id, template')
+    //     .eq('id', TEMPLATE_ID)
 
-    const TEMPLATE = (templates as any[])[0].template
+    // const TEMPLATE = (templates as any[])[0].template
+
+    const TEMPLATE = await getRouteTemplate(HOSTNAME, ROUTE)
 
     let { data: test_template_data, error } = await supabase
         .from('test_template_data')
