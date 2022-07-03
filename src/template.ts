@@ -93,6 +93,10 @@ export const build = async (HOSTNAME: string, ROUTE: string) => {
 
     const TEMPLATE = await getRouteTemplate(HOSTNAME, ROUTE)
 
+    if (!TEMPLATE) {
+        throw Error('Something went wrong getting template...')
+    }
+
     let { data: test_template_data, error } = await supabase
         .from('test_template_data')
         .select('key, value')
