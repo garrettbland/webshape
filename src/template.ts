@@ -1,4 +1,4 @@
-import { render, filters } from 'squirrelly'
+import { render } from 'squirrelly'
 import { getDynamicItems } from './utils/template'
 import { createClient } from '@supabase/supabase-js'
 import { generateFilters } from './utils/filter'
@@ -6,7 +6,7 @@ const supabaseUrl = 'https://dztmlsuztaonzwvowtlz.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY as string
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
-import { getRouteTemplate } from './db'
+import { getRouteData, getRouteTemplate } from './db'
 
 /**
  * Register Filters
@@ -14,17 +14,9 @@ import { getRouteTemplate } from './db'
 generateFilters()
 
 export const build = async (HOSTNAME: string, ROUTE: string) => {
-    const TEMPLATE = await getRouteTemplate(HOSTNAME, ROUTE)
+    const TEMPLATE = (await getRouteTemplate(HOSTNAME, ROUTE)) ?? ''
 
-    if (!TEMPLATE) {
-        throw Error('Something went wrong getting template...')
-    }
-
-    let { data: test_template_data, error } = await supabase
-        .from('test_template_data')
-        .select('key, value')
-        .eq('domain', HOSTNAME)
-        .eq('route', ROUTE)
+    const test_template_data = await getRouteData(HOSTNAME, ROUTE)
 
     /**
      * Parse HTML and get data needed for template

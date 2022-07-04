@@ -25,7 +25,7 @@ export const getRouteTemplate = async (HOSTNAME: string, ROUTE: string) => {
 
         if (error) {
             console.log(error)
-            throw Error('Database call go bang')
+            throw Error('Supabase error "getRouteTemplate"')
         }
 
         const TEMPLATE = (page_template as ResponseType[])[0].templates.template
