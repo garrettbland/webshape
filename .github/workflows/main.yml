@@ -34,15 +34,16 @@ jobs:
         environment: CI
         needs: ci
         runs-on: ubuntu-latest
-
         steps:
-            - name: User Node 16
+            - name: Use Node 16
               uses: actions/setup-node@v1
               with:
                   node-version: 16.x
-
+            - name: Deploy to Render
+              env:
+                  RENDER_DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_URL }}
             - run: |
-                  curl ${{ env.RENDER_DEPLOY_URL }}
+                  curl ${ RENDER_DEPLOY_URL }
 
     generate-templates:
         needs: ci
