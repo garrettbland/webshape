@@ -28,6 +28,10 @@ export const getDynamicItems = (HTML: string): DynamicValues[] => {
     /**
      * Remove duplicates. Example - Page title might be used in multiple
      * places.
+     *
+     * TODO: Need to address. Each tree object has the "t" key but the value differs
+     * for loops and text. Text is 'c'. Loops/each are 'h'. No idea why. When its a loop,
+     * Text uses "c" for the dynamic "it.[name]" and loops use "p" for dynamic "it.[name]"
      */
     const treeObjects = uniqBy(allTreeObjects, 'c')
 

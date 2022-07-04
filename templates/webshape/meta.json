@@ -9,12 +9,14 @@
             {
                 "title": "Customizable",
                 "description": "Webshape is customizable and stuff",
-                "image": "https://via.placeholder.com/150"
+                "image": "https://via.placeholder.com/150",
+                "imageAlt": "wee"
             },
             {
                 "title": "Simple",
                 "description": "Everything is super simple and quick",
-                "image": "https://via.placeholder.com/150"
+                "image": "https://via.placeholder.com/150",
+                "imageAlt": "wee"
             }
         ]
     }

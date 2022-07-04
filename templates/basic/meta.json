@@ -3,6 +3,7 @@
     "public": true,
     "test_data": {
         "title": "Webshape Test",
-        "description": "Websites and stuff!!!"
+        "description": "Websites and stuff!!!",
+        "hero_image": "#"
     }
 }

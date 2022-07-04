@@ -1,7 +1,7 @@
 import { render, filters } from 'squirrelly'
 import { getDynamicItems } from './utils/template'
 import { createClient } from '@supabase/supabase-js'
-import { Filters } from './types'
+import { generateFilters } from './utils/filter'
 const supabaseUrl = 'https://dztmlsuztaonzwvowtlz.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY as string
 export const supabase = createClient(supabaseUrl, supabaseKey)
@@ -9,12 +9,9 @@ export const supabase = createClient(supabaseUrl, supabaseKey)
 import { getRouteTemplate } from './db'
 
 /**
- * Custom filters. Used for our purpose as "tags" to define type of
- * content in template - text, image, content, etc. Reason being that
- * the filters are shown in Ast object from parsing
+ * Register Filters
  */
-const FILTERS = Object.keys(Filters)
-FILTERS.forEach((filterItem) => filters.define(filterItem, (originalVal) => originalVal))
+generateFilters()
 
 export const build = async (HOSTNAME: string, ROUTE: string) => {
     const TEMPLATE = await getRouteTemplate(HOSTNAME, ROUTE)
