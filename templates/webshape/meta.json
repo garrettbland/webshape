@@ -3,6 +3,7 @@
     "public": false,
     "test_data": {
         "title": "Webshape Test",
+        "monkey": "Bannana",
         "description": "Website in minutes",
         "features": [
             {
