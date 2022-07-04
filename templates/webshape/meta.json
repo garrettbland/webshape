@@ -3,6 +3,18 @@
     "public": false,
     "test_data": {
         "title": "Webshape Test",
-        "description": "Website in minutes"
+        "description": "Website in minutes",
+        "features": [
+            {
+                "title": "Customizable",
+                "description": "Webshape is customizable and stuff",
+                "image": "https://via.placeholder.com/150"
+            },
+            {
+                "title": "Simple",
+                "description": "Everything is super simple and quick",
+                "image": "https://via.placeholder.com/150"
+            }
+        ]
     }
 }

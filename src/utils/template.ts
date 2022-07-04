@@ -1,9 +1,11 @@
 import { parse, defaultConfig } from 'squirrelly'
 import { uniqBy } from 'lodash'
 import { TemplateObject } from 'squirrelly/dist/types/parse.js'
+import { Filters } from '../types'
 
 interface DynamicValues {
     key: string
+    type: keyof typeof Filters
 }
 
 /**
@@ -37,9 +39,32 @@ export const getDynamicItems = (HTML: string): DynamicValues[] => {
      * { f: [ [Array] ], c: 'it.title', t: 'i'}
      * ```
      */
-    const normalizedTreeItems = (treeObjects as TemplateObject[]).map((item) => {
-        return {
-            key: item!.c!.slice(3),
+
+    /**
+     * Need to address this. "item.f" assums that there are filters being
+     * used and that the first one is the data type. Need to write a
+     * func that searches filters and handles this nicely
+     */
+    const normalizedTreeItems: DynamicValues[] = (treeObjects as TemplateObject[]).map((item) => {
+        switch (item.f[0][0]) {
+            case 'text': {
+                return {
+                    key: item!.c!.slice(3),
+                    type: 'text',
+                }
+            }
+            case 'list': {
+                return {
+                    key: item!.p!.slice(3),
+                    type: 'list',
+                }
+            }
+            default: {
+                return {
+                    key: item!.c!.slice(3),
+                    type: 'text',
+                }
+            }
         }
     })
 

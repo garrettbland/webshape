@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>{{ it.title | text }}</title>
+        <title>{{ it.title | text | label('Page Title') }}</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="https://cdn.tailwindcss.com"></script>
@@ -258,6 +258,21 @@
                         </dl>
                     </div>
                 </div>
+            </div>
+
+            <!-- List idea -->
+            <!-- example data features: [{title: '', description: ''},{title: '', description: ''}]-->
+
+            <div>
+                <!-- Loop here -->
+                {{ @each(it.features) => item | list }}
+                <div>
+                    <h1>{{ item.title }}</h1>
+                    <p>{{ item.description }}</p>
+                    <img src="{{ item.image }}" alt="{{ item.imageAlt }}" />
+                </div>
+                {{ /each }}
+                <!-- End Loop -->
             </div>
         </main>
     </body>

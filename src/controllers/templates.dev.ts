@@ -3,6 +3,7 @@ import { getPathName } from '../utils/path'
 import { join } from 'path'
 import { readFile } from 'fs/promises'
 import { render } from 'squirrelly'
+import { getDynamicItems } from '../utils/template'
 
 /**
  * Templates Route. Allows templates to be developed using
@@ -22,6 +23,9 @@ export const templatesDev = async (req: FastifyRequest, res: FastifyReply) => {
     const { test_data } = JSON.parse(await readFile(template_test_data, 'utf-8'))
 
     const HTML = render(html_template, test_data)
+
+    const dynamicItems = getDynamicItems(html_template)
+    console.log(dynamicItems)
 
     res.type('text/html; charset=utf-8').send(HTML)
 }
