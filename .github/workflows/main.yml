@@ -9,30 +9,8 @@ on:
             - main
 
 jobs:
-    code-quality:
-        name: Code Quality
-        if: github.event.pull_request.merged == true
-        runs-on: ubuntu-latest
-        steps:
-            # Checkout the repo's code
-            - name: Checkout repository
-              uses: actions/checkout@v2
-
-            # Make sure we use Node 12.x for Next.js
-            - name: Use Node 16
-              uses: actions/setup-node@v1
-              with:
-                  node-version: 16.x
-
-            # Install the dependencies, lint, test, build
-            - run: npm ci --no-audit
-            - run: npm run lint --if-present
-            - run: npm test
-            - run: npm run build --if-present
-
     deploy:
         name: Deploy to Render
-        if: github.event.pull_request.merged == true
         environment: CI
         needs: ci
         runs-on: ubuntu-latest
@@ -50,7 +28,6 @@ jobs:
 
     generate-templates:
         name: Generate Templates Library
-        if: github.event.pull_request.merged == true
         needs: ci
         runs-on: ubuntu-latest
         steps:
