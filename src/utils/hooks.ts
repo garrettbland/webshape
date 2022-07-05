@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify'
+import { pullRequest } from '../controllers/pullRequest'
 
 /**
  * Validates that incoming request is something that we want to allow to make
@@ -14,6 +15,25 @@ export const validateRoute = (
     const { url } = req
     if (url.endsWith('.js')) {
         res.type('text/html').status(404).send('404 not found')
+    }
+    done()
+}
+
+/**
+ * Checks domain to see if it includes Renders automatically
+ * generated https://webshape-pr-{PR_#}.onrender.com deploy
+ * preview. If true, then return pullRequest controller. If
+ * false, continue business as usual.
+ */
+export const checkPullRequestDomain = (
+    req: FastifyRequest,
+    res: FastifyReply,
+    done: HookHandlerDoneFunction
+) => {
+    if (req.hostname.includes('webshape-pr-')) {
+        console.log('THIS PR ROUTE')
+        pullRequest(res)
+        return
     }
     done()
 }
