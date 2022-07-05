@@ -19,6 +19,12 @@ export const validateRoute = (
     done()
 }
 
+/**
+ * Checks domain to see if it includes Renders automatically
+ * generated https://webshape-pr-{PR_#}.onrender.com deploy
+ * preview. If true, then return pullRequest controller. If
+ * false, continue business as usual.
+ */
 export const checkPullRequestDomain = (
     req: FastifyRequest,
     res: FastifyReply,

@@ -6,7 +6,8 @@ import { getDynamicItems } from '../utils/template'
 
 /**
  * Pull Request Route. Allows pull request preview URL's to
- * be tested.
+ * be tested without actually having to get anything from a database.
+ * Currently this just uses the kitchen sink template.
  */
 export const pullRequest = async (res: FastifyReply) => {
     const template_file_path = join(process.cwd(), 'templates', 'kitchen-sink', 'index.html')
