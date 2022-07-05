@@ -1,17 +1,26 @@
 name: WebShape CI
 
 on:
-    # Trigger the workflow on push for the main branch
-    push:
+    # Trigger the workflow on closed/merged pull requests to the main branch.
+    # A closed branch that isn't merged will still trigger this action, so an
+    # if statement is added to each job to make sure it was merged into main.
+    pull_request:
         branches:
             - main
+        types: [closed]
     # Example if we wanted to do something else for pull requests
     ## pull:
     ## branches:
     ## - main
 
+    # Need to add a thing in to generate data for pr preview link
+    # Example - webshape-pr-1-onrender.com needs corrosponding
+    # database stuff.
+
 jobs:
-    ci:
+    code-quality:
+        name: Code Quality
+        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         steps:
             # Checkout the repo's code
@@ -31,6 +40,8 @@ jobs:
             - run: npm run build --if-present
 
     deploy:
+        name: Deploy to Render
+        if: github.event.pull_request.merged == true
         environment: CI
         needs: ci
         runs-on: ubuntu-latest
@@ -47,6 +58,8 @@ jobs:
                   curl $RENDER_DEPLOY_URL
 
     generate-templates:
+        name: Generate Templates Library
+        if: github.event.pull_request.merged == true
         needs: ci
         runs-on: ubuntu-latest
         steps:
