@@ -12,7 +12,6 @@ jobs:
     deploy:
         name: Deploy to Render
         environment: CI
-        needs: ci
         runs-on: ubuntu-latest
         steps:
             - name: Use Node 16
@@ -28,7 +27,6 @@ jobs:
 
     generate-templates:
         name: Generate Templates Library
-        needs: ci
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
