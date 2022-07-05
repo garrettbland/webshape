@@ -9,7 +9,6 @@ on:
 jobs:
     code-quality:
         name: Code Quality
-        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         steps:
             # Checkout the repo's code
