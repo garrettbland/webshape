@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify'
+import { pullRequest } from '../controllers/pullRequest'
 
 /**
  * Validates that incoming request is something that we want to allow to make
@@ -14,6 +15,19 @@ export const validateRoute = (
     const { url } = req
     if (url.endsWith('.js')) {
         res.type('text/html').status(404).send('404 not found')
+    }
+    done()
+}
+
+export const checkPullRequestDomain = (
+    req: FastifyRequest,
+    res: FastifyReply,
+    done: HookHandlerDoneFunction
+) => {
+    if (req.hostname.includes('webshape-pr-')) {
+        console.log('THIS PR ROUTE')
+        pullRequest(res)
+        return
     }
     done()
 }
