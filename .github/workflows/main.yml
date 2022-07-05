@@ -1,21 +1,12 @@
 name: WebShape CI
 
 on:
-    # Trigger the workflow on closed/merged pull requests to the main branch.
-    # A closed branch that isn't merged will still trigger this action, so an
-    # if statement is added to each job to make sure it was merged into main.
-    pull_request:
+    # Trigger the workflow on push for the main branch. Branch protections for
+    # main are turned on. Meaning that only a pull request that has passing CI
+    # actions will be allowed to trigger this after being merged.
+    push:
         branches:
             - main
-        types: [closed]
-    # Example if we wanted to do something else for pull requests
-    ## pull:
-    ## branches:
-    ## - main
-
-    # Need to add a thing in to generate data for pr preview link
-    # Example - webshape-pr-1-onrender.com needs corrosponding
-    # database stuff.
 
 jobs:
     code-quality:
