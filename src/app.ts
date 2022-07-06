@@ -29,7 +29,7 @@ export const getApp = (opts?: FastifyServerOptions) => {
     /**
      * Dev Routes. Only used during development
      */
-    if (isDevelopment) {
+    if (isDevelopment()) {
         app.get('/templates/*', templatesDev)
     }
 

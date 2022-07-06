@@ -1,17 +1,14 @@
 import { render } from 'squirrelly'
 import { getDynamicItems } from './utils/template'
-import { createClient } from '@supabase/supabase-js'
-import { generateFilters } from './utils/filter'
-const supabaseUrl = 'https://dztmlsuztaonzwvowtlz.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY as string
-export const supabase = createClient(supabaseUrl, supabaseKey)
+import { registerFilters } from './utils/filter'
+import { Filters } from './types'
 
 import { getRouteData, getRouteTemplate } from './db'
 
 /**
  * Register Filters
  */
-generateFilters()
+registerFilters(Object.keys(Filters))
 
 export const build = async (HOSTNAME: string, ROUTE: string) => {
     const TEMPLATE = (await getRouteTemplate(HOSTNAME, ROUTE)) ?? ''

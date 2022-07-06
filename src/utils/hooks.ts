@@ -31,7 +31,6 @@ export const checkPullRequestDomain = (
     done: HookHandlerDoneFunction
 ) => {
     if (req.hostname.includes('webshape-pr-')) {
-        console.log('THIS PR ROUTE')
         pullRequest(res)
         return
     }

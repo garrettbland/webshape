@@ -1,9 +1,10 @@
 import { readdir, access, readFile } from 'fs/promises'
 import { join } from 'path'
 import { parse, defaultConfig } from 'squirrelly'
-import { generateFilters } from '../src/utils/filter'
+import { registerFilters } from '../src/utils/filter'
 const TEMPLATES_DIR = join(process.cwd(), 'templates')
 import { TemplateObject } from 'squirrelly/dist/types/parse.js'
+import { Filters } from '../src/types'
 
 const listDirectoriesInPath = async (path: string) => {
     try {
@@ -76,7 +77,10 @@ describe('HTML Templates', () => {
         expect(allNecessaryKeysExist).toBe(true)
     })
     it('Validates that each HTML template parses successfully', async () => {
-        generateFilters()
+        /**
+         * Register Filters
+         */
+        registerFilters(Object.keys(Filters))
 
         const TEMPLATE_DIRS = await listDirectoriesInPath(TEMPLATES_DIR)
 

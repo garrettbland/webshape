@@ -19,4 +19,5 @@ module.exports = {
         },
     },
     coverageReporters: ['json', ['lcov', { projectRoot: './src' }], 'text', 'clover'],
+    setupFiles: ['<rootDir>/.jest/setEnvVars.js'],
 }

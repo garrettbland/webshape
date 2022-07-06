@@ -1,13 +1,13 @@
 import 'dotenv/config'
 import { getApp } from './app'
-import { isDevelopment, PORT } from './utils/development'
+import { isDevelopment, getPort } from './utils/development'
 
 /**
  * Setup app with logging and some extra config options set
  */
 const server = getApp({
     logger: {
-        transport: isDevelopment
+        transport: isDevelopment()
             ? {
                   target: 'pino-pretty',
                   options: {
@@ -24,7 +24,7 @@ const server = getApp({
  */
 const start = async () => {
     try {
-        await server.listen({ port: PORT })
+        await server.listen({ port: getPort() })
     } catch (err) {
         server.log.error(err)
         process.exit(1)
