@@ -1,5 +1,4 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { getPathName } from '../utils/path'
 import { join } from 'path'
 import { readFile } from 'fs/promises'
 import { render } from 'squirrelly'
@@ -12,9 +11,9 @@ import { getDynamicItems } from '../utils/template'
  * use its corrosponding `meta.json` file for the test data.
  */
 export const templatesDev = async (req: FastifyRequest, res: FastifyReply) => {
-    const { hostname, protocol, url } = req
+    const { url } = req
 
-    const path = getPathName(protocol, hostname, url)
+    const path = url
 
     const template_file_path = join(process.cwd(), path, 'index.html')
     const template_test_data = join(process.cwd(), path, 'meta.json')
