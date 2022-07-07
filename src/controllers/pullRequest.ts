@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyReply } from 'fastify'
 import { join } from 'path'
 import { readFile } from 'fs/promises'
 import { render } from 'squirrelly'

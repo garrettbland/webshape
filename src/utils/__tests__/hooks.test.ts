@@ -1,42 +1,28 @@
-import { validateRoute, checkPullRequestDomain } from '../hooks'
-import { getApp } from '../../app'
-import * as template from '../../template'
-
-let app: any
-
-beforeAll(() => {
-    jest.spyOn(template, 'build').mockResolvedValue('<p>Example HTML</p>')
-    app = getApp()
-})
-
-afterAll(() => {
-    /**
-     * Restore environment
-     */
-    jest.resetAllMocks()
-})
+import { isValidRoute, isPullRequest } from '../hooks'
 
 describe('hooks', () => {
-    describe('validateRoute', () => {
-        it('Should return 404 if request ends with ".js"', async () => {
-            const response = await app.inject({
-                method: 'GET',
-                url: '/serviceWorker.js',
-            })
-
-            expect(response.statusCode).toBe(404)
+    describe('isValidRoute', () => {
+        it('Should return false if request ends with ".js"', async () => {
+            const testURL = '/serviceWorker.js'
+            expect(isValidRoute(testURL)).toBe(false)
         })
-        it('Should return 200 if request is valid', async () => {
-            const response = await app.inject({
-                method: 'GET',
-                url: '/',
-            })
-
-            expect(response.statusCode).toBe(200)
+        it('Should return true if request is "/"', async () => {
+            const testURL = '/'
+            expect(isValidRoute(testURL)).toBe(true)
+        })
+        it('Should return true if request is "/sub/path"', async () => {
+            const testURL = '/sub/path'
+            expect(isValidRoute(testURL)).toBe(true)
         })
     })
-    describe('checkPullRequestDomain', () => {
-        it.todo('Should forward request to pullRequest controller if pull request')
-        it.todo('Should call Fastifys done method if request is not pull request')
+    describe('isPullRequest', () => {
+        it('Should return true if request is PR preview', async () => {
+            const testHOSTNAME = 'https://webshape-pr-5.onrender.com'
+            expect(isPullRequest(testHOSTNAME)).toBe(true)
+        })
+        it('Should return false if hostname is not PR preview', async () => {
+            const testHOSTNAME = 'https://subdomain.webshape.com'
+            expect(isPullRequest(testHOSTNAME)).toBe(false)
+        })
     })
 })
