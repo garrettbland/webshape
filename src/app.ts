@@ -3,6 +3,8 @@ import { isDevelopment } from './utils/development'
 import { isValidRoute, isPullRequest } from './utils/hooks'
 import { notFound } from './controllers/notFound'
 import { pullRequest } from './controllers/pullRequest'
+import { registerFilters } from './utils/filter'
+import { MetaFilters, Filters } from './types'
 
 /**
  * Controllers
@@ -16,6 +18,14 @@ export const getApp = (opts?: FastifyServerOptions) => {
      * Initialize fastify app with options
      */
     const app = fastify(opts)
+
+    /**
+     * Register Filters. Registering both MetaFilters and content Filters. The MetaFilters
+     * are only useful in the CMS, but we still need to register them while rendering HTML
+     * because the filters live in the HTML. So we basically just add them here so Squirelly
+     * doesn't error out and yell at us.
+     */
+    registerFilters([...Object.keys(MetaFilters), ...Object.keys(Filters)])
 
     /**
      * Sets default not found handler

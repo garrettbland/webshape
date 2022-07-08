@@ -2,6 +2,7 @@
     "title": "Kitchen Sink",
     "public": false,
     "test_data": {
-        "title": "Woot, PR working!"
+        "title": "Woot, PR working!",
+        "description": "test"
     }
 }
