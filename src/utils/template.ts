@@ -52,6 +52,12 @@ export const getDynamicItems = (HTML: string): DynamicValues[] => {
                     type: 'text',
                 }
             }
+            case 'content': {
+                return {
+                    key: item!.c!.slice(3),
+                    type: 'content',
+                }
+            }
             case 'image': {
                 return {
                     key: item!.c!.slice(3),

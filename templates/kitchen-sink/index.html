@@ -4,5 +4,6 @@
     </head>
     <body>
         <code> { title: "{{ it.title | text }}" } </code>
+        <p>{{ it.description | text | label('Home Page Description') }}</p>
     </body>
 </html>
