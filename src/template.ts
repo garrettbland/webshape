@@ -26,8 +26,9 @@ export const build = async (HOSTNAME: string, ROUTE: string) => {
      */
     const requiredTemplateObjects = options.map((item) => {
         return {
-            key: (item.key as string) ?? 'Default...',
+            key: item.key as string,
             type: item.type,
+            value: 'Default...',
         }
     })
 

@@ -5,6 +5,7 @@ import { registerFilters } from '../src/utils/filter'
 const TEMPLATES_DIR = join(process.cwd(), 'templates')
 import { TemplateObject } from 'squirrelly/dist/types/parse.js'
 import { Filters } from '../src/types'
+import { getDynamicItems } from '../src/utils/template'
 
 const listDirectoriesInPath = async (path: string) => {
     try {
@@ -92,6 +93,9 @@ describe('HTML Templates', () => {
                 try {
                     const html_template = await readFile(indexFilePath, 'utf-8')
 
+                    const dynamicItems = getDynamicItems(html_template)
+                    const validParse = Array.isArray(dynamicItems)
+
                     /**
                      * Parsing the html template gives us a way to tell if the
                      * tags and loops are setup correctly.
@@ -129,7 +133,7 @@ describe('HTML Templates', () => {
                             }
                         })
 
-                    return [validHTML ? true : false]
+                    return [validHTML ? true : false, validParse ? true : false]
                 } catch (err) {
                     throw new Error(`Trouble parsing ${indexFilePath}...${err}`)
                 }

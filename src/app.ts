@@ -9,6 +9,7 @@ import { pullRequest } from './controllers/pullRequest'
  */
 import { base } from './controllers/base'
 import { templatesDev } from './controllers/templates.dev'
+import { errorController } from './controllers/error'
 
 export const getApp = (opts?: FastifyServerOptions) => {
     /**
@@ -20,6 +21,11 @@ export const getApp = (opts?: FastifyServerOptions) => {
      * Sets default not found handler
      */
     app.setNotFoundHandler((req, res) => notFound(res))
+
+    /**
+     * Sets default error handler
+     */
+    app.setErrorHandler((error, req, res) => errorController(error, req, res))
 
     /**
      * Add hooks to Fastify

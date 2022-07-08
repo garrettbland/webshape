@@ -65,10 +65,7 @@ export const getDynamicItems = (HTML: string): DynamicValues[] => {
                 }
             }
             default: {
-                return {
-                    key: item!.c!.slice(3),
-                    type: 'text',
-                }
+                throw Error(`Filter (${filter}) not found...`)
             }
         }
     })
