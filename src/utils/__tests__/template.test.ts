@@ -20,6 +20,16 @@ describe('template', () => {
             expect(testAST[1].key).toBe('heroImage')
             expect(testAST[1].type).toBe('image')
         })
+        it('Should throw error if content filter is not found', () => {
+            try {
+                const testHTML = `
+                <p>{{ it.title | label('Testing') }}</p>
+            `
+                getDynamicItems(testHTML)
+            } catch (error) {
+                expect((error as any).message).toBe('No content Filter case found...')
+            }
+        })
     })
     describe('getFilter', () => {
         it('Should find first available filter from template tag', () => {
@@ -35,6 +45,10 @@ describe('template', () => {
         })
         it('Should return null if no filter is added', () => {
             const filters = [] as any
+            expect(getFilter(filters)).toBe(null)
+        })
+        it('Should return null if no suitable content filter is found', () => {
+            const filters = [['animal', '']] as any
             expect(getFilter(filters)).toBe(null)
         })
     })

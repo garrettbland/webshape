@@ -71,7 +71,7 @@ export const getDynamicItems = (HTML: string): DynamicValues[] => {
                 }
             }
             default: {
-                throw Error(`Filter (${filter}) not found...`)
+                throw Error(`No content Filter case found...`)
             }
         }
     })
