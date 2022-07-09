@@ -26,3 +26,8 @@ export enum Filters {
     image = 'image',
     list = 'list',
 }
+
+export interface RouteData {
+    key: string
+    value: string
+}
