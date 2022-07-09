@@ -1,8 +1,8 @@
-import { supabase } from './supabase'
+import { createClient } from './supabase'
 
 export const getRouteData = async (HOSTNAME: string, ROUTE: string) => {
     try {
-        const { data: test_template_data, error } = await supabase
+        const { data: test_template_data, error } = await createClient()
             .from('test_template_data')
             .select('key, value')
             .eq('domain', HOSTNAME)

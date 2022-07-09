@@ -1,5 +1,5 @@
-import { supabase } from './supabase'
+import { createClient } from './supabase'
 import { getRouteTemplate } from './getRouteTemplate'
 import { getRouteData } from './getRouteData'
 
-export { supabase, getRouteTemplate, getRouteData }
+export { createClient, getRouteTemplate, getRouteData }

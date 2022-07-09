@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { createClient } from './supabase'
 
 interface ResponseType {
     domain: string
@@ -16,7 +16,7 @@ interface ResponseType {
  */
 export const getRouteTemplate = async (HOSTNAME: string, ROUTE: string) => {
     try {
-        const { data: page_template, error } = await supabase
+        const { data: page_template, error } = await createClient()
             .from('site_page_template')
             .select(`domain, route, templates ( template )`)
             .eq('domain', HOSTNAME)
