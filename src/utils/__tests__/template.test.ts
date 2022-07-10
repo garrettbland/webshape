@@ -1,4 +1,6 @@
-import { getDynamicItems, getFilter } from '../template'
+import { getDynamicItems, getFilter, buildTemplate } from '../template'
+import { registerFilters } from '../filter'
+import { MetaFilters, Filters } from '../../types'
 
 describe('template', () => {
     describe('getDynamicItems', () => {
@@ -51,5 +53,18 @@ describe('template', () => {
             const filters = [['animal', '']] as any
             expect(getFilter(filters)).toBe(null)
         })
+    })
+
+    describe('buildTemplate', () => {
+        it('Should return rendered HTML template', () => {
+            const testHTMLTemplate = '<p>Site title: {{ it.title | text }}</p>'
+            const testTemplateData = [{ key: 'title', value: 'Webshape' }]
+            registerFilters([...Object.keys(MetaFilters), ...Object.keys(Filters)])
+            const HTMLString = buildTemplate(testHTMLTemplate, testTemplateData)
+            expect(HTMLString).toBe('<p>Site title: Webshape</p>')
+        })
+        /**
+         * TO DO: Add more scenarioes to test images, lists, content, ect (all filters)
+         */
     })
 })

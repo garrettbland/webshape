@@ -132,7 +132,10 @@ export const getFilter = (filtersArray: Array<Filter>): string | null => {
     return filter[0]
 }
 
-export const buildTemplate = (htmlTemplate: string, routeData: Record<string, string>[]) => {
+export const buildTemplate = (
+    htmlTemplate: string,
+    routeData: Record<string, string>[]
+): string => {
     /**
      * Parse HTML and get data needed for template
      */
