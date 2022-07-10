@@ -1,8 +1,7 @@
 import { FastifyReply } from 'fastify'
 import { join } from 'path'
 import { readFile } from 'fs/promises'
-import { render } from 'squirrelly'
-import { getDynamicItems } from '../utils/template'
+import { getDynamicItems, buildTemplate } from '../utils/template'
 
 /**
  * Pull Request Route. Allows pull request preview URL's to
@@ -16,7 +15,19 @@ export const pullRequest = async (res: FastifyReply) => {
     const html_template = await readFile(template_file_path, 'utf-8')
     const { test_data } = JSON.parse(await readFile(template_test_data, 'utf-8'))
 
-    const HTML = render(html_template, test_data)
+    /**
+     * Typeof thing for value is for arrays. Arrays are stored as JSON.stringified
+     * strings in database. In meta.json, it's not stringified the same way so we
+     * do it at runtime so we don't have to mess with pure strings while developing.
+     */
+    const template_data = Object.entries(test_data).map(([key, value]) => {
+        return {
+            key: key,
+            value: typeof value !== 'string' ? JSON.stringify(value) : (value as string),
+        }
+    })
+
+    const HTML = buildTemplate(html_template, template_data)
 
     const dynamicItems = getDynamicItems(html_template)
 

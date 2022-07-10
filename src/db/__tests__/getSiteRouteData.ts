@@ -1,4 +1,4 @@
-import { getRouteData } from '../getRouteData'
+import { getSiteRouteData } from '../getSiteRouteData'
 import * as supabaseUtil from '../supabase'
 
 describe('Get Route Data', () => {
@@ -9,19 +9,32 @@ describe('Get Route Data', () => {
                     select: () => ({
                         eq: () => ({
                             eq: () => ({
-                                data: [{ key: 'title', value: 'Rays Flowers' }],
+                                data: [
+                                    {
+                                        key: 'title',
+                                        value: 'Rays Flowers',
+                                        template_id: { slug: 'example_template' },
+                                        sites: {
+                                            hostname: 'webshape.dev',
+                                        },
+                                    },
+                                ],
                             }),
                         }),
                     }),
                 } as any)
         )
 
-        const testKeyValues = await getRouteData('https://example.com', '/')
+        const testKeyValues = await getSiteRouteData('https://example.com', '/')
 
         expect(testKeyValues).toStrictEqual([
             {
                 key: 'title',
                 value: 'Rays Flowers',
+                template_id: { slug: 'example_template' },
+                sites: {
+                    hostname: 'webshape.dev',
+                },
             },
         ])
     })
@@ -42,9 +55,9 @@ describe('Get Route Data', () => {
                     } as any)
             )
 
-            await getRouteData('https://example.com', '/')
+            await getSiteRouteData('https://example.com', '/')
         } catch (err) {
-            expect(err).toBe('Supabase error "getRouteData"')
+            expect(err).toBe('Supabase error "getSiteRouteData"')
         }
     })
 })

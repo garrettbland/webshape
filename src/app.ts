@@ -9,8 +9,8 @@ import { MetaFilters, Filters } from './types'
 /**
  * Controllers
  */
-import { base } from './controllers/base'
-import { templatesDev } from './controllers/templates.dev'
+import { baseController } from './controllers/base'
+import { devTemplatesController } from './controllers/templates'
 import { errorController } from './controllers/error'
 
 export const getApp = (opts?: FastifyServerOptions) => {
@@ -51,13 +51,13 @@ export const getApp = (opts?: FastifyServerOptions) => {
      * Base Route. Handles apex route and all subroutes for multi page
      * sites.
      */
-    app.get('/', base)
+    app.get('/', baseController)
 
     /**
      * Dev Routes. Only used during development
      */
     if (isDevelopment()) {
-        app.get('/templates/*', templatesDev)
+        app.get('/templates/*', devTemplatesController)
     }
 
     return app

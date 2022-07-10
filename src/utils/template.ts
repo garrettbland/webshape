@@ -1,4 +1,4 @@
-import { parse, defaultConfig } from 'squirrelly'
+import { parse, render, defaultConfig } from 'squirrelly'
 import { uniqBy } from 'lodash'
 import { TemplateObject, Filter } from 'squirrelly/dist/types/parse.js'
 import { Filters } from '../types'
@@ -130,4 +130,53 @@ export const getFilter = (filtersArray: Array<Filter>): string | null => {
     const filter = filtersArray.find((item) => availableFilters.includes(item[0])) ?? [null]
 
     return filter[0]
+}
+
+export const buildTemplate = (htmlTemplate: string, routeData: Record<string, string>[]) => {
+    /**
+     * Parse HTML and get data needed for template
+     */
+    const options = getDynamicItems(htmlTemplate)
+    console.log(`This template needs ${options.map(({ key }) => key).join(', ')}`)
+
+    /**
+     * Create array of objects to be injected into template with default
+     * value and type added.
+     */
+    const requiredTemplateObjects = options.map((item) => {
+        return {
+            key: item.key as string,
+            type: item.type,
+            value: item.type === 'list' ? '[]' : 'Default...',
+        }
+    })
+
+    const mergedDatabaseTemplateArrays = requiredTemplateObjects.map((item) => {
+        return {
+            ...item,
+            ...routeData?.find((_) => _.key === item.key),
+        }
+    })
+
+    const templateData = mergedDatabaseTemplateArrays.reduce((previousValue, nextvalue) => {
+        if (nextvalue.type === 'list') {
+            console.log(nextvalue.value)
+            return {
+                ...previousValue,
+                [nextvalue.key as string]: JSON.parse(nextvalue.value),
+            }
+        }
+
+        return {
+            ...previousValue,
+            [nextvalue.key as string]: nextvalue.value,
+        }
+    }, {})
+
+    /**
+     * Render html with template data
+     */
+    const rendered = render(htmlTemplate, templateData)
+
+    return rendered
 }
