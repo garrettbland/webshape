@@ -71,7 +71,7 @@ export const getDynamicItems = (HTML: string): DynamicValues[] => {
                 }
             }
             default: {
-                throw Error(`No content Filter case found...`)
+                throw Error(`No content filter was found on template tag in HTML...`)
             }
         }
     })
@@ -132,6 +132,31 @@ export const getFilter = (filtersArray: Array<Filter>): string | null => {
     return filter[0]
 }
 
+/**
+ * Returns string default value to be used within template. This is useful to continue
+ * rendering the template, even if the dynamic data doesn't exist in the database yet. This
+ * is for when users switch theme's, or new dynamic options are added to the template.
+ */
+export const generateDefaultValue = (itemType: keyof typeof Filters): string => {
+    switch (itemType) {
+        case 'text': {
+            return 'Default...'
+        }
+        case 'content': {
+            return 'Default...'
+        }
+        case 'image': {
+            return '#'
+        }
+        case 'list': {
+            return '[]'
+        }
+        default: {
+            throw Error(`Unsupported filter type (${itemType})...`)
+        }
+    }
+}
+
 export const buildTemplate = (
     htmlTemplate: string,
     routeData: Record<string, string>[]
@@ -140,17 +165,17 @@ export const buildTemplate = (
      * Parse HTML and get data needed for template
      */
     const options = getDynamicItems(htmlTemplate)
-    console.log(`This template needs ${options.map(({ key }) => key).join(', ')}`)
 
     /**
      * Create array of objects to be injected into template with default
      * value and type added.
+     * TO DO: Setup
      */
     const requiredTemplateObjects = options.map((item) => {
         return {
             key: item.key as string,
             type: item.type,
-            value: item.type === 'list' ? '[]' : 'Default...',
+            value: generateDefaultValue(item.type),
         }
     })
 
@@ -163,7 +188,6 @@ export const buildTemplate = (
 
     const templateData = mergedDatabaseTemplateArrays.reduce((previousValue, nextvalue) => {
         if (nextvalue.type === 'list') {
-            console.log(nextvalue.value)
             return {
                 ...previousValue,
                 [nextvalue.key as string]: JSON.parse(nextvalue.value),

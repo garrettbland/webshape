@@ -54,7 +54,6 @@ describe('Get Route Data', () => {
                         }),
                     } as any)
             )
-
             await getSiteRouteData('https://example.com', '/')
         } catch (err) {
             expect(err).toBe('Supabase error "getSiteRouteData"')

@@ -22,6 +22,9 @@ export const getSiteRouteData = async (HOSTNAME: string, URL: string) => {
 
         return site_route_data
     } catch (err) {
+        /**
+         * TO DO: Track in Log Rocket or something...
+         */
         console.log('There was an error getting data', err)
     }
 }

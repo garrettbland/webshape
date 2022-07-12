@@ -4,11 +4,12 @@ module.exports = {
     transform: {
         '^.+\\.ts?$': 'ts-jest',
     },
+
     collectCoverageFrom: [
         'src/**/*.{ts,tsx}',
         '!src/**/*.test.ts',
         '!<rootDir>/node_modules/',
-        '!<rootDir>/build/',
+        '!<rootDir>/dist/',
     ],
     coverageThreshold: {
         global: {

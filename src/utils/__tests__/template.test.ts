@@ -1,4 +1,4 @@
-import { getDynamicItems, getFilter, buildTemplate } from '../template'
+import { getDynamicItems, getFilter, generateDefaultValue, buildTemplate } from '../template'
 import { registerFilters } from '../filter'
 import { MetaFilters, Filters } from '../../types'
 
@@ -29,7 +29,9 @@ describe('template', () => {
             `
                 getDynamicItems(testHTML)
             } catch (error) {
-                expect((error as any).message).toBe('No content Filter case found...')
+                expect((error as any).message).toBe(
+                    'No content filter was found on template tag in HTML...'
+                )
             }
         })
     })
@@ -55,16 +57,106 @@ describe('template', () => {
         })
     })
 
-    describe('buildTemplate', () => {
-        it('Should return rendered HTML template', () => {
-            const testHTMLTemplate = '<p>Site title: {{ it.title | text }}</p>'
-            const testTemplateData = [{ key: 'title', value: 'Webshape' }]
-            registerFilters([...Object.keys(MetaFilters), ...Object.keys(Filters)])
-            const HTMLString = buildTemplate(testHTMLTemplate, testTemplateData)
-            expect(HTMLString).toBe('<p>Site title: Webshape</p>')
+    describe('generateDefaultValue', () => {
+        it('Should return expected default value for each filter type', () => {
+            expect(generateDefaultValue('text')).toBe('Default...')
+            expect(generateDefaultValue('content')).toBe('Default...')
+            expect(generateDefaultValue('image')).toBe('#')
+            expect(generateDefaultValue('list')).toBe('[]')
         })
-        /**
-         * TO DO: Add more scenarioes to test images, lists, content, ect (all filters)
-         */
+        it('Should throw expected Error if content filter was not found', () => {
+            expect(() => generateDefaultValue('something' as any)).toThrowError(
+                'Unsupported filter type (something)...'
+            )
+        })
+    })
+
+    describe('buildTemplate', () => {
+        beforeAll(() => {
+            registerFilters([...Object.keys(MetaFilters), ...Object.keys(Filters)])
+        })
+
+        describe('General', () => {
+            it('Should render HTML with empty data object', () => {
+                const rawHtml = '<p>This site has no dynamic data</p>'
+                const data = [{}]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<p>This site has no dynamic data</p>')
+            })
+            it('Should return rendered HTML template with multiple same keys', () => {
+                const rawHtml = '<p>a: {{ it.title | text }}, b: {{ it.title | content }}</p>'
+                const data = [{ key: 'title', value: 'Webshape' }]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<p>a: Webshape, b: Webshape</p>')
+            })
+        })
+
+        describe('Filter - "text"', () => {
+            it('Should render with "text" filter', () => {
+                const rawHtml = '<p>Text: {{ it.title | text }}</p>'
+                const data = [{ key: 'title', value: 'Text Filter' }]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<p>Text: Text Filter</p>')
+            })
+            it('Should render default value with "text" filter', () => {
+                const rawHtml = '<p>Text: {{ it.title | text }}</p>'
+                const data = [{}]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<p>Text: Default...</p>')
+            })
+        })
+        describe('Filter - "content"', () => {
+            it('Should render with "content" filter', () => {
+                const rawHtml = '<p>Content: {{ it.title | content }}</p>'
+                const data = [{ key: 'title', value: 'Content Filter' }]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<p>Content: Content Filter</p>')
+            })
+            it('Should render default value with "content" filter', () => {
+                const rawHtml = '<p>Content: {{ it.title | content }}</p>'
+                const data = [{}]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<p>Content: Default...</p>')
+            })
+        })
+        describe('Filter - "image"', () => {
+            it('Should render with "image" filter', () => {
+                const rawHtml =
+                    '<img src="{{ it.image_url | image }}" alt="{{ it.image_alt | text }}"/>'
+                const data = [
+                    { key: 'image_url', value: 'https://example.com/image.jpg' },
+                    { key: 'image_alt', value: 'Example Image' },
+                ]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe(
+                    '<img src="https://example.com/image.jpg" alt="Example Image"/>'
+                )
+            })
+            it('Should render default value with "image" filter', () => {
+                const rawHtml =
+                    '<img src="{{ it.image_url | image }}" alt="{{ it.image_alt | text }}"/>'
+                const data = [{ key: 'image_alt', value: 'Example Image' }]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<img src="#" alt="Example Image"/>')
+            })
+        })
+        describe('Filter - "list"', () => {
+            it('Should render with "list" filter', () => {
+                const rawHtml =
+                    '<ul>{{ @each(it.features) => item | list }}<li>{{ item.title }}</li>{{ /each }}</ul>'
+                const data = [
+                    { key: 'features', value: '[{ "title": "Easy" }, { "title": "Simple" }]' },
+                ]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<ul><li>Easy</li><li>Simple</li></ul>')
+            })
+            it('Should render default value with "list" filter', () => {
+                const rawHtml =
+                    '<ul>{{ @each(it.features) => item | list }}<li>{{ item.title }}</li>{{ /each }}</ul>'
+                const data = [{}]
+                const rendered = buildTemplate(rawHtml, data)
+                expect(rendered).toBe('<ul></ul>')
+            })
+        })
     })
 })
