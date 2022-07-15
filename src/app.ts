@@ -40,9 +40,7 @@ export const getApp = (opts?: FastifyServerOptions) => {
     /**
      * Add hooks to Fastify
      */
-    app.addHook('preHandler', (req, res, done) =>
-        isValidRoute(req.url) ? done() : res.status(404).send()
-    )
+    app.addHook('preHandler', (req, res, done) => (isValidRoute(req.url) ? done() : notFound(res)))
     app.addHook('preHandler', (req, res, done) =>
         isPullRequest(req.hostname) ? pullRequest(res) : done()
     )
