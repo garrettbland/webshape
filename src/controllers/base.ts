@@ -45,5 +45,5 @@ export const baseController = async (req: FastifyRequest, res: FastifyReply) => 
     })
 
     const content = buildTemplate(html_template, template_data)
-    res.type('text/html').send(content)
+    res.type('text/html; charset=utf-8').send(content)
 }
