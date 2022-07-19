@@ -20,7 +20,7 @@ export const pullRequest = async (res: FastifyReply) => {
     /**
      * Typeof thing for value is for arrays. Arrays are stored as JSON.stringified
      * strings in database. In meta.json, it's not stringified the same way so we
-     * do it at runtime so we don't have to mess with pure strings while developing.
+     * do it at runtime so we don't have to mess with stringified arrays while developing.
      */
     const template_data = Object.entries(test_data).map(([key, value]) => {
         return {

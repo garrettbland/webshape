@@ -26,7 +26,6 @@ export const devTemplatesController = async (req: FastifyRequest, res: FastifyRe
      * while developing
      */
     const template_data = Object.entries(test_data).map(([key, value]) => {
-        console.log(value)
         return {
             key: key,
             value: typeof value !== 'string' ? JSON.stringify(value) : (value as string),
