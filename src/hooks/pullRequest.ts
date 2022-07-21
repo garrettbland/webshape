@@ -10,5 +10,5 @@ export const checkPullRequest = (
     if (isPullRequest(req.hostname)) {
         pullRequest(res)
     }
-    done()
+    return done()
 }

@@ -8,7 +8,7 @@ export const validateRoute = (
     done: HookHandlerDoneFunction
 ) => {
     if (isValidRoute(req.url)) {
-        done()
+        return done()
     }
     notFound(res)
 }
