@@ -1,21 +1,18 @@
-// WORKS
-// var listenMock = jest.fn().mockResolvedValue('done')
-// jest.mock('../app', () => ({
-//     getApp: () => ({
-//         listen: listenMock,
-//     }),
-// }))
-
 var listenMock = jest.fn()
+var getAppMock = () => ({
+    listen: listenMock,
+})
 jest.mock('../app', () => ({
-    getApp: () => ({
-        listen: listenMock,
-    }),
+    getApp: getAppMock,
 }))
 
 import { start } from '../server'
 
 describe('Server', () => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
     it('Should start the server on a port 3000', async () => {
         listenMock.mockResolvedValue('done')
         await start()
