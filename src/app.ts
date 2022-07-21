@@ -1,10 +1,12 @@
-import fastify, { FastifyServerOptions } from 'fastify'
+import { fastify, FastifyServerOptions } from 'fastify'
 import { isDevelopment } from './utils/development'
-import { isValidRoute, isPullRequest } from './utils/hooks'
+// import { isValidRoute, isPullRequest } from './utils/hooks'
 import { notFound } from './controllers/notFound'
-import { pullRequest } from './controllers/pullRequest'
+// import { pullRequest } from './controllers/pullRequest'
 import { registerFilters } from './utils/filter'
 import { MetaFilters, Filters } from './types'
+import { validateRoute } from './hooks/validateRoute'
+import { checkPullRequest } from './hooks/pullRequest'
 
 /**
  * Controllers
@@ -40,10 +42,8 @@ export const getApp = (opts?: FastifyServerOptions) => {
     /**
      * Add hooks to Fastify
      */
-    app.addHook('preHandler', (req, res, done) => (isValidRoute(req.url) ? done() : notFound(res)))
-    app.addHook('preHandler', (req, res, done) =>
-        isPullRequest(req.hostname) ? pullRequest(res) : done()
-    )
+    app.addHook('preHandler', validateRoute)
+    app.addHook('preHandler', checkPullRequest)
 
     /**
      * Base Route. Handles apex route and all subroutes for multi page
