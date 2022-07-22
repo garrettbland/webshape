@@ -26,3 +26,14 @@ jobs:
             - run: npm run lint --if-present
             - run: npm test
             - run: npm run build --if-present
+
+    coverage:
+        name: Code Coverage
+        runs-on: ubuntu-latest
+        permissions:
+            checks: write
+            pull-requests: write
+            contents: write
+        steps:
+            - uses: actions/checkout@v1
+            - uses: ArtiomTr/jest-coverage-report-action@v2

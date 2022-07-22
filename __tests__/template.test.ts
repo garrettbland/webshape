@@ -1,9 +1,11 @@
 import { readdir, access, readFile } from 'fs/promises'
 import { join } from 'path'
-import { parse, defaultConfig } from 'squirrelly'
-import { generateFilters } from '../src/utils/filter'
+import { render, parse, defaultConfig } from 'squirrelly'
+import { registerFilters } from '../src/utils/filter'
+import { TemplateObject } from 'squirrelly/dist/types/parse'
 const TEMPLATES_DIR = join(process.cwd(), 'templates')
-import { TemplateObject } from 'squirrelly/dist/types/parse.js'
+import { MetaFilters, Filters } from '../src/types'
+import { getDynamicItems } from '../src/utils/template'
 
 const listDirectoriesInPath = async (path: string) => {
     try {
@@ -76,7 +78,10 @@ describe('HTML Templates', () => {
         expect(allNecessaryKeysExist).toBe(true)
     })
     it('Validates that each HTML template parses successfully', async () => {
-        generateFilters()
+        /**
+         * Register Filters
+         */
+        registerFilters([...Object.keys(MetaFilters), ...Object.keys(Filters)])
 
         const TEMPLATE_DIRS = await listDirectoriesInPath(TEMPLATES_DIR)
 
@@ -85,14 +90,21 @@ describe('HTML Templates', () => {
         const renderTemplates = await Promise.all(
             TEMPLATE_DIRS.map(async (template_dir) => {
                 const indexFilePath = join(process.cwd(), 'templates', template_dir, 'index.html')
+                const metaJsonFilePath = join(process.cwd(), 'templates', template_dir, 'meta.json')
                 try {
                     const html_template = await readFile(indexFilePath, 'utf-8')
+                    const { test_data } = JSON.parse(await readFile(metaJsonFilePath, 'utf-8'))
+
+                    const dynamicItems = getDynamicItems(html_template)
+                    const validParse = Array.isArray(dynamicItems)
 
                     /**
                      * Parsing the html template gives us a way to tell if the
                      * tags and loops are setup correctly.
                      */
                     const validHTML = parse(html_template, defaultConfig)
+
+                    const validRender = render(html_template, test_data)
 
                     /**
                      * Check to make sure that the data object starts with "it."
@@ -125,7 +137,11 @@ describe('HTML Templates', () => {
                             }
                         })
 
-                    return [validHTML ? true : false]
+                    return [
+                        validHTML ? true : false,
+                        validParse ? true : false,
+                        validRender ? true : false,
+                    ]
                 } catch (err) {
                     throw new Error(`Trouble parsing ${indexFilePath}...${err}`)
                 }

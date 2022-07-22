@@ -1,9 +1,9 @@
-/**
- * Example test
- */
+import * as serverModule from '../server'
 
-describe('Example', () => {
-    it('Should return 1', () => {
-        expect(1).toBe(1)
+describe('Index', () => {
+    it('Should execute the start() method from server', async () => {
+        var spy = jest.spyOn(serverModule, 'start').mockResolvedValue()
+        require('../index')
+        expect(spy).toBeCalledTimes(1)
     })
 })
